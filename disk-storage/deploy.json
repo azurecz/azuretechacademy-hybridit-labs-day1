@@ -173,6 +173,38 @@
             }
         },
         {
+            "type": "Microsoft.Compute/disks",
+            "name": "uncached",
+            "apiVersion": "2018-09-30",
+            "location": "[resourceGroup().location]",
+            "sku": {
+                "name": "Standard_LRS",
+                "tier": "Standard"
+            },
+            "properties": {
+                "creationData": {
+                    "createOption": "Empty"
+                },
+                "diskSizeGB": 31
+            }
+        },
+        {
+            "type": "Microsoft.Compute/disks",
+            "name": "cached",
+            "apiVersion": "2018-09-30",
+            "location": "[resourceGroup().location]",
+            "sku": {
+                "name": "Standard_LRS",
+                "tier": "Standard"
+            },
+            "properties": {
+                "creationData": {
+                    "createOption": "Empty"
+                },
+                "diskSizeGB": 31
+            }
+        },
+        {
             "type": "Microsoft.Compute/virtualMachines",
             "apiVersion": "2018-10-01",
             "name": "[variables('virtualMachines_storagetest_vm_name')]",
@@ -185,7 +217,9 @@
                 "sssdlvm1",
                 "sssdlvm2",
                 "sssdlvm3",
-                "sssdlvm4"
+                "sssdlvm4",
+                "cached",
+                "uncached"
             ],
             "properties": {
                 "hardwareProfile": {
@@ -282,6 +316,28 @@
                                 "id": "[resourceId('Microsoft.Compute/disks', 'sssdlvm4')]"
                             },
                             "diskSizeGB": 125
+                        },
+                        {
+                            "lun": 7,
+                            "name": "uncached",
+                            "createOption": "Attach",
+                            "caching": "None",
+                            "managedDisk": {
+                                "storageAccountType": "StandardSSD_LRS",
+                                "id": "[resourceId('Microsoft.Compute/disks', 'uncached')]"
+                            },
+                            "diskSizeGB": 31
+                        },
+                        {
+                            "lun": 8,
+                            "name": "cached",
+                            "createOption": "Attach",
+                            "caching": "ReadOnly",
+                            "managedDisk": {
+                                "storageAccountType": "StandardSSD_LRS",
+                                "id": "[resourceId('Microsoft.Compute/disks', 'cached')]"
+                            },
+                            "diskSizeGB": 31
                         }
                     ]
                 },

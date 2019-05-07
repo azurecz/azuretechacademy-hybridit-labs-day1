@@ -36,6 +36,22 @@ mount /dev/vg/lv /disk/lvm
 echo "UUID=$(blkid | grep -oP '/dev/vg/lv: UUID="*"\K[^"]*')   /disk/lvm   ext4   defaults   1   2" >> /etc/fstab
 chmod go+w /disk/lvm
 
+# Uncached
+(echo n; echo p; echo 1; echo; echo; echo w) | fdisk /dev/sdj > /dev/null 
+mkfs -t ext4 /dev/sdj1 > /dev/null 
+mkdir -p /disk/uncached 
+mount /dev/sdj1 /disk/uncached
+echo "UUID=$(blkid | grep -oP '/dev/sdj1: UUID="*"\K[^"]*')   /disk/uncached   ext4   defaults   1   2" >> /etc/fstab
+chmod go+w /disk/uncached
+
+# Cached
+(echo n; echo p; echo 1; echo; echo; echo w) | fdisk /dev/sdk > /dev/null 
+mkfs -t ext4 /dev/sdk1 > /dev/null 
+mkdir -p /disk/cached 
+mount /dev/sdk1 /disk/cached
+echo "UUID=$(blkid | grep -oP '/dev/sdk1: UUID="*"\K[^"]*')   /disk/cached   ext4   defaults   1   2" >> /etc/fstab
+chmod go+w /disk/cached
+
 # Ultra SSD
 # (echo n; echo p; echo 1; echo; echo; echo w) | fdisk /dev/sdj > /dev/null 
 # mkfs -t ext4 /dev/sdj1 > /dev/null 
@@ -261,20 +277,69 @@ rw=randwrite
 directory=/mnt
 EOF
 
+cat <<EOF >/root/uncached.ini
+[global]
+size=6g
+direct=1
+iodepth=256
+ioengine=libaio
+bs=8k
+
+[reader1]
+rw=randread
+directory=/disk/uncached
+[reader2]
+rw=randread
+directory=/disk/uncached
+[reader3]
+rw=randread
+directory=/disk/uncached
+[reader4]
+rw=randread
+directory=/disk/uncached
+EOF
+
+cat <<EOF >/root/cached.ini
+[global]
+size=6g
+direct=1
+iodepth=256
+ioengine=libaio
+bs=8k
+
+[reader1]
+rw=randread
+directory=/disk/cached
+[reader2]
+rw=randread
+directory=/disk/cached
+[reader3]
+rw=randread
+directory=/disk/cached
+[reader4]
+rw=randread
+directory=/disk/cached
+EOF
+
 # Test
 cd /root
-echo "Running sync tests"
-sudo fio --runtime $1 s-hdd-sync.ini | tee s-hdd-sync.results
-sudo fio --runtime $1 s-ssd-sync.ini | tee s-ssd-sync.results
-sudo fio --runtime $1 lvm-sync.ini | tee lvm-sync.results
-sudo fio --runtime $1 p-ssd-sync.ini | tee p-ssd-sync.results
-# sudo fio --runtime $1 u-ssd-sync.ini | tee u-ssd-sync.results
-sudo fio --runtime $1 l-ssd-sync.ini | tee l-ssd-sync.results
+echo "Running sync write tests"
+fio --runtime $1 s-hdd-sync.ini | tee s-hdd-sync.results
+fio --runtime $1 s-ssd-sync.ini | tee s-ssd-sync.results
+fio --runtime $1 lvm-sync.ini | tee lvm-sync.results
+fio --runtime $1 p-ssd-sync.ini | tee p-ssd-sync.results
+# fio --runtime $1 u-ssd-sync.ini | tee u-ssd-sync.results
+fio --runtime $1 l-ssd-sync.ini | tee l-ssd-sync.results
 
-echo "Running async tests"
-sudo fio --runtime $1 s-hdd-async.ini | tee s-hdd-async.results
-sudo fio --runtime $1 s-ssd-async.ini | tee s-ssd-async.results
-sudo fio --runtime $1 lvm-async.ini | tee lvm-async.results
-sudo fio --runtime $1 p-ssd-async.ini | tee p-ssd-async.results
-# sudo fio --runtime $1 u-ssd-async.ini | tee u-ssd-async.results
-sudo fio --runtime $1 l-ssd-async.ini | tee l-ssd-async.results
+echo "Running async write tests"
+fio --runtime $1 s-hdd-async.ini | tee s-hdd-async.results
+fio --runtime $1 s-ssd-async.ini | tee s-ssd-async.results
+fio --runtime $1 lvm-async.ini | tee lvm-async.results
+fio --runtime $1 p-ssd-async.ini | tee p-ssd-async.results
+# fio --runtime $1 u-ssd-async.ini | tee u-ssd-async.results
+fio --runtime $1 l-ssd-async.ini | tee l-ssd-async.results
+
+echo "Running cache tests"
+fio --runtime $1 uncached.ini | tee uncached.results
+fio --runtime $1 cached.ini | tee cached.results
+
