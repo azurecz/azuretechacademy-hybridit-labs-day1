@@ -20,7 +20,7 @@
         "virtualNetworks_storagetest_vmVNET_name": "storagetest-net",
         "networkInterfaces_storagetest_vmVMNic_name": "storagetest-nic",
         "publicIPAddresses_storagetest_vmPublicIP_name": "storagetest-ip",
-        "scriptLocation": "https://tomuvstore.blob.core.windows.net/public/test.sh"
+        "scriptLocation": "https://raw.githubusercontent.com/azurecz/azuretechacademy-hybridit-labs-day1/master/disk-storage/test.sh"
     },
     "resources": [
         {
