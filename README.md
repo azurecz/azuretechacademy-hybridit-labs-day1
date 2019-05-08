@@ -25,10 +25,12 @@ Connect to storagetest VM you have deployed previously and check results of stor
 * Premium SSD P20 /disk/premiumssd (sde)
 * 4x Standard SSD E10 in LVM pool /disk/vg/lv (sdf, sdg, sdh, sdi)
 * Local SSD /mnt (sdb)
+* 2x small Standard HDD with different cache settings /disk/uncached and /disk/cached
 
-Two tests are run on each volume:
+Three tests are run on each volume:
 * sync test random write (waiting for ACK after each transaction simulating legacy workload)
 * async test random write (256 bulk operations with 4 threads simulating database workload)
+* async test random read test comparing cached and non-cached performance
 
 Connect to VM and check results:
 ```bash
