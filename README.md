@@ -64,3 +64,36 @@ What to expect:
 * Always be aware of VM size limits, it makes no sense to buy P70 disk when connected to D2s_v3 VM type
 
 ## Networking
+Follow network diagram and instructions in following repo to test comple of networking scenarios:
+[https://github.com/tkubica12/azure-networking-lab](https://github.com/tkubica12/azure-networking-lab)
+
+## Disaster recovery with Azure Site Recovery
+TBD
+
+## VM monitoring
+### VM Health and service map
+Onboard VM to Azure monitor and check VM health page, performance metrics and service map
+
+### Aggregating and searching logs
+Open Logs and search for logs, use filtering and basic capabilities of Kusto language
+
+### Metrics and adding guest-based metrics
+Open Metrics page and create your own views and pin them to dashboard. Install guest-level agent to gather other metrics such as file-system or memory usage.
+
+### Create alert
+Create alert based on metrics. We will use dynamic threashold (ML-based alert) and CPU usage and setup Action Group to send push notification to Azure mobile application. Generate CPU load on machine and wait for alert to popup in Azure mobile application.
+
+### Creating workbook
+Follow instructor to create your own workbook adding some metrics and some log views.
+
+### Update management
+Create Automation Account and onboard VM to it. Check missing updates and learn how to plan patching deployments.
+
+### Inventory and change tracking
+Investigate invetory tracking for list of installed components and applications as well as change tracking to see history.
+
+### Integrated configuration management with PowerShell DSC
+Import PowerShell DSC to install IIS, onboard VM to Azure Automation Configuration Management and check IIS is getting installed.
+
+## You homework
+TBD
