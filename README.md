@@ -23,7 +23,7 @@ Deploy networking lab environment
 3. Initiate backup by clicking Backup Now (it will create app-consistent snapshot by orchestrating with VSS in about 20 minutes and then we have to wait about 1 hour untill backup is transfered from snapshot to vault)
 4. Go to existing backup and click on restore file, map backup as iSCSI disk to your notebook following instructions
 5. Unmount backup
-6. Restore whole VM
+6. Restore whole VM. You can either create new VM or replace existing (when replacing existing VM needs to be stopped first)
 7. Configure storage account and create file share
 8. Go to backup vault and enable file share backup
 
