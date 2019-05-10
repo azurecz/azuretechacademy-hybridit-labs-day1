@@ -62,21 +62,22 @@ What to expect:
 * Always be aware of VM size limits, it makes no sense to buy P70 disk when connected to D2s_v3 VM type [https://docs.microsoft.com/en-us/azure/virtual-machines/windows/sizes](https://docs.microsoft.com/en-us/azure/virtual-machines/windows/sizes)
 
 ## Blob Storage
-1. Create storage account v2
+1. Create storage account v2 GRS-RA
 2. Create container and upload some files
 3. Use Storage Explorer to generate SAS token to access file
-4. Move one file to Cool tier
-5. Move one file to Archive tier
-6. Create policy to automatically manage lifecycle of files:
+4. Make sure file is also readable on secondary endpoint (secondary region)
+5. Move one file to Cool tier
+6. Move one file to Archive tier
+7. Create policy to automatically manage lifecycle of files:
    1. Move file to Cool after 1 day of inactivity
    2. Move file to Archive after 2 days of inactivity
    3. Delete file after 3 days of inactivity
-7. Setup immutable policy so files in particular container cannot be removed for 2 days
-8. Enable soft delete and observe behavior
-9. Large-scale file copy with AzCopy v10
+8. Setup immutable policy so files in particular container cannot be removed for 2 days
+9. Enable soft delete and observe behavior
+10. Large-scale file copy with AzCopy v10
    1.  Install AzCopy v10 on it [https://docs.microsoft.com/cs-cz/azure/storage/common/storage-use-azcopy-v10](https://docs.microsoft.com/cs-cz/azure/storage/common/storage-use-azcopy-v10)
    2.  Use AzCopy to copy file from local to blob storage
-10. Large-scale automated file copy with Data Box Gateway
+11. Large-scale automated file copy with Data Box Gateway
     1.  Download Azure Data Box Gateway and install it in your hypervisor (use your PC or nested virtualization in Azure using Dv3 or Ev3 machine instance)
     2.  Connect Data Box to Azure and associate with storage account
     3.  Setup copy policies and rate limit
