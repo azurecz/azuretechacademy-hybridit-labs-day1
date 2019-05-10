@@ -1,0 +1,494 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "password": {
+            "type": "securestring",
+            "metadata": {
+                "description": "VM password"
+            }
+        },
+        "time": {
+            "type": "string",
+            "defaultValue": "120",
+            "metadata": {
+                "description": "Test duration in seconds"
+            }
+        },
+        "zone": {
+            "type": "string"
+        }
+    },
+    "variables": {
+        "virtualMachines_storagetest_vm_name": "storagetest-vm",
+        "virtualNetworks_storagetest_vmVNET_name": "storagetest-net",
+        "networkInterfaces_storagetest_vmVMNic_name": "storagetest-nic",
+        "publicIPAddresses_storagetest_vmPublicIP_name": "storagetest-ip",
+        "scriptLocation": "https://raw.githubusercontent.com/azurecz/azuretechacademy-hybridit-labs-day1/master/disk-storage/testultra.sh"
+    },
+    "resources": [
+        {
+            "type": "Microsoft.Network/publicIPAddresses",
+            "apiVersion": "2018-12-01",
+            "name": "[variables('publicIPAddresses_storagetest_vmPublicIP_name')]",
+            "location": "[resourceGroup().location]",
+            "zones": [
+                "[parameters('zone')]"
+            ],
+            "sku": {
+                "name": "Basic",
+                "tier": "Regional"
+            },
+            "properties": {
+                "publicIPAddressVersion": "IPv4",
+                "publicIPAllocationMethod": "Dynamic"
+            }
+        },
+        {
+            "type": "Microsoft.Network/virtualNetworks",
+            "apiVersion": "2018-12-01",
+            "name": "[variables('virtualNetworks_storagetest_vmVNET_name')]",
+            "location": "[resourceGroup().location]",
+            "properties": {
+                "provisioningState": "Succeeded",
+                "resourceGuid": "e115c7fd-0f01-4fcc-aae5-5a6baefe1d31",
+                "addressSpace": {
+                    "addressPrefixes": [
+                        "10.0.0.0/16"
+                    ]
+                },
+                "subnets": [
+                    {
+                        "name": "storagetest-vmSubnet",
+                        "properties": {
+                            "addressPrefix": "10.0.0.0/24"
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "type": "Microsoft.Compute/disks",
+            "name": "premiumssd",
+            "apiVersion": "2018-09-30",
+            "location": "[resourceGroup().location]",
+            "zones": [
+                "[parameters('zone')]"
+            ],
+            "sku": {
+                "name": "Premium_LRS",
+                "tier": "Premium"
+            },
+            "properties": {
+                "creationData": {
+                    "createOption": "Empty"
+                },
+                "diskSizeGB": 500
+            }
+        },
+        {
+            "type": "Microsoft.Compute/disks",
+            "name": "standardssd",
+            "apiVersion": "2018-09-30",
+            "location": "[resourceGroup().location]",
+            "zones": [
+                "[parameters('zone')]"
+            ],
+            "sku": {
+                "name": "StandardSSD_LRS",
+                "tier": "Standard"
+            },
+            "properties": {
+                "creationData": {
+                    "createOption": "Empty"
+                },
+                "diskSizeGB": 500
+            }
+        },
+        {
+            "type": "Microsoft.Compute/disks",
+            "name": "standardhdd",
+            "apiVersion": "2018-09-30",
+            "location": "[resourceGroup().location]",
+            "zones": [
+                "[parameters('zone')]"
+            ],
+            "sku": {
+                "name": "Standard_LRS",
+                "tier": "Standard"
+            },
+            "properties": {
+                "creationData": {
+                    "createOption": "Empty"
+                },
+                "diskSizeGB": 500
+            }
+        },
+        {
+            "type": "Microsoft.Compute/disks",
+            "name": "sssdlvm1",
+            "apiVersion": "2018-09-30",
+            "location": "[resourceGroup().location]",
+            "zones": [
+                "[parameters('zone')]"
+            ],
+            "sku": {
+                "name": "StandardSSD_LRS",
+                "tier": "Standard"
+            },
+            "properties": {
+                "creationData": {
+                    "createOption": "Empty"
+                },
+                "diskSizeGB": 125
+            }
+        },
+        {
+            "type": "Microsoft.Compute/disks",
+            "name": "sssdlvm2",
+            "apiVersion": "2018-09-30",
+            "location": "[resourceGroup().location]",
+            "zones": [
+                "[parameters('zone')]"
+            ],
+            "sku": {
+                "name": "StandardSSD_LRS",
+                "tier": "Standard"
+            },
+            "properties": {
+                "creationData": {
+                    "createOption": "Empty"
+                },
+                "diskSizeGB": 125
+            }
+        },
+        {
+            "type": "Microsoft.Compute/disks",
+            "name": "sssdlvm3",
+            "apiVersion": "2018-09-30",
+            "location": "[resourceGroup().location]",
+            "zones": [
+                "[parameters('zone')]"
+            ],
+            "sku": {
+                "name": "StandardSSD_LRS",
+                "tier": "Standard"
+            },
+            "properties": {
+                "creationData": {
+                    "createOption": "Empty"
+                },
+                "diskSizeGB": 125
+            }
+        },
+        {
+            "type": "Microsoft.Compute/disks",
+            "name": "sssdlvm4",
+            "apiVersion": "2018-09-30",
+            "location": "[resourceGroup().location]",
+            "zones": [
+                "[parameters('zone')]"
+            ],
+            "sku": {
+                "name": "StandardSSD_LRS",
+                "tier": "Standard"
+            },
+            "properties": {
+                "creationData": {
+                    "createOption": "Empty"
+                },
+                "diskSizeGB": 125
+            }
+        },
+        {
+            "type": "Microsoft.Compute/disks",
+            "name": "uncached",
+            "apiVersion": "2018-09-30",
+            "location": "[resourceGroup().location]",
+            "zones": [
+                "[parameters('zone')]"
+            ],
+            "sku": {
+                "name": "Standard_LRS",
+                "tier": "Standard"
+            },
+            "properties": {
+                "creationData": {
+                    "createOption": "Empty"
+                },
+                "diskSizeGB": 31
+            }
+        },
+        {
+            "type": "Microsoft.Compute/disks",
+            "name": "cached",
+            "apiVersion": "2018-09-30",
+            "location": "[resourceGroup().location]",
+            "zones": [
+                "[parameters('zone')]"
+            ],
+            "sku": {
+                "name": "Standard_LRS",
+                "tier": "Standard"
+            },
+            "properties": {
+                "creationData": {
+                    "createOption": "Empty"
+                },
+                "diskSizeGB": 31
+            }
+        },
+        {
+            "type": "Microsoft.Compute/disks",
+            "name": "ultra",
+            "apiVersion": "2018-09-30",
+            "location": "[resourceGroup().location]",
+            "zones": [
+                "[parameters('zone')]"
+            ],
+            "sku": {
+                "name": "UltraSSD_LRS"
+            },
+            "properties": {
+                "creationData": {
+                    "createOption": "Empty"
+                },
+                "diskSizeGB": 500,
+                "diskIOPSReadWrite": 14000,
+                "diskMBpsReadWrite": 500
+            }
+        },
+        {
+            "type": "Microsoft.Compute/virtualMachines",
+            "apiVersion": "2018-10-01",
+            "name": "[variables('virtualMachines_storagetest_vm_name')]",
+            "location": "[resourceGroup().location]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/networkInterfaces', variables('networkInterfaces_storagetest_vmVMNic_name'))]",
+                "premiumssd",
+                "standardssd",
+                "standardhdd",
+                "sssdlvm1",
+                "sssdlvm2",
+                "sssdlvm3",
+                "sssdlvm4",
+                "cached",
+                "uncached",
+                "ultra"
+            ],
+            "zones": [
+                "[parameters('zone')]"
+            ],
+            "properties": {
+                "hardwareProfile": {
+                    "vmSize": "Standard_D8s_v3"
+                },
+                "additionalCapabilities": {
+                    "ultraSSDEnabled": "true"
+                },
+                "storageProfile": {
+                    "imageReference": {
+                        "publisher": "Canonical",
+                        "offer": "UbuntuServer",
+                        "sku": "18.04-LTS",
+                        "version": "latest"
+                    },
+                    "osDisk": {
+                        "osType": "Linux",
+                        "name": "[concat(variables('virtualMachines_storagetest_vm_name'), '_OsDisk_1_30c3a7bf1ef3412881e886cd493d0a33')]",
+                        "createOption": "FromImage",
+                        "caching": "ReadWrite",
+                        "diskSizeGB": 30
+                    },
+                    "dataDisks": [
+                        {
+                            "lun": 0,
+                            "name": "standardhdd",
+                            "createOption": "Attach",
+                            "caching": "None",
+                            "managedDisk": {
+                                "storageAccountType": "Standard_LRS",
+                                "id": "[resourceId('Microsoft.Compute/disks', 'standardhdd')]"
+                            },
+                            "diskSizeGB": 500
+                        },
+                        {
+                            "lun": 1,
+                            "name": "standardssd",
+                            "createOption": "Attach",
+                            "caching": "None",
+                            "managedDisk": {
+                                "storageAccountType": "StandardSSD_LRS",
+                                "id": "[resourceId('Microsoft.Compute/disks', 'standardssd')]"
+                            },
+                            "diskSizeGB": 500
+                        },
+                        {
+                            "lun": 2,
+                            "name": "premiumssd",
+                            "createOption": "Attach",
+                            "caching": "None",
+                            "managedDisk": {
+                                "storageAccountType": "Premium_LRS",
+                                "id": "[resourceId('Microsoft.Compute/disks', 'premiumssd')]"
+                            },
+                            "diskSizeGB": 500
+                        },
+                        {
+                            "lun": 3,
+                            "name": "sssdlvm1",
+                            "createOption": "Attach",
+                            "caching": "None",
+                            "managedDisk": {
+                                "storageAccountType": "StandardSSD_LRS",
+                                "id": "[resourceId('Microsoft.Compute/disks', 'sssdlvm1')]"
+                            },
+                            "diskSizeGB": 125
+                        },
+                        {
+                            "lun": 4,
+                            "name": "sssdlvm2",
+                            "createOption": "Attach",
+                            "caching": "None",
+                            "managedDisk": {
+                                "storageAccountType": "StandardSSD_LRS",
+                                "id": "[resourceId('Microsoft.Compute/disks', 'sssdlvm2')]"
+                            },
+                            "diskSizeGB": 125
+                        },
+                        {
+                            "lun": 5,
+                            "name": "sssdlvm3",
+                            "createOption": "Attach",
+                            "caching": "None",
+                            "managedDisk": {
+                                "storageAccountType": "StandardSSD_LRS",
+                                "id": "[resourceId('Microsoft.Compute/disks', 'sssdlvm3')]"
+                            },
+                            "diskSizeGB": 125
+                        },
+                        {
+                            "lun": 6,
+                            "name": "sssdlvm4",
+                            "createOption": "Attach",
+                            "caching": "None",
+                            "managedDisk": {
+                                "storageAccountType": "StandardSSD_LRS",
+                                "id": "[resourceId('Microsoft.Compute/disks', 'sssdlvm4')]"
+                            },
+                            "diskSizeGB": 125
+                        },
+                        {
+                            "lun": 7,
+                            "name": "uncached",
+                            "createOption": "Attach",
+                            "caching": "None",
+                            "managedDisk": {
+                                "storageAccountType": "StandardSSD_LRS",
+                                "id": "[resourceId('Microsoft.Compute/disks', 'uncached')]"
+                            },
+                            "diskSizeGB": 31
+                        },
+                        {
+                            "lun": 8,
+                            "name": "cached",
+                            "createOption": "Attach",
+                            "caching": "ReadOnly",
+                            "managedDisk": {
+                                "storageAccountType": "StandardSSD_LRS",
+                                "id": "[resourceId('Microsoft.Compute/disks', 'cached')]"
+                            },
+                            "diskSizeGB": 31
+                        },
+                        {
+                            "lun": 9,
+                            "name": "ultra",
+                            "createOption": "Attach",
+                            "caching": "None",
+                            "managedDisk": {
+                                "storageAccountType": "UltraSSD_LRS",
+                                "id": "[resourceId('Microsoft.Compute/disks', 'ultra')]"
+                            },
+                            "diskSizeGB": 500
+                        }
+                    ]
+                },
+                "osProfile": {
+                    "computerName": "[variables('virtualMachines_storagetest_vm_name')]",
+                    "adminUsername": "storage",
+                    "adminPassword": "[parameters('password')]",
+                    "linuxConfiguration": {
+                        "disablePasswordAuthentication": false,
+                        "provisionVMAgent": true
+                    },
+                    "secrets": [],
+                    "allowExtensionOperations": true
+                },
+                "networkProfile": {
+                    "networkInterfaces": [
+                        {
+                            "id": "[resourceId('Microsoft.Network/networkInterfaces', variables('networkInterfaces_storagetest_vmVMNic_name'))]"
+                        }
+                    ]
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Compute/virtualMachines/extensions",
+            "name": "[concat(variables('virtualMachines_storagetest_vm_name'), '/script')]",
+            "location": "[resourceGroup().location]",
+            "apiVersion": "2015-06-15",
+            "dependsOn": [
+                "[resourceId('Microsoft.Compute/virtualMachines/', variables('virtualMachines_storagetest_vm_name'))]"
+            ],
+            "properties": {
+                "publisher": "Microsoft.Azure.Extensions",
+                "type": "CustomScript",
+                "typeHandlerVersion": "2.0",
+                "autoUpgradeMinorVersion": true,
+                "settings": {
+                    "skipDos2Unix": false
+                },
+                "protectedSettings": {
+                    "commandToExecute": "[concat('sudo ./test.sh ', parameters('time'))]",
+                    "fileUris": [
+                        "[variables('scriptLocation')]"
+                    ]
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Network/networkInterfaces",
+            "apiVersion": "2018-12-01",
+            "name": "[variables('networkInterfaces_storagetest_vmVMNic_name')]",
+            "location": "[resourceGroup().location]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/publicIPAddresses', variables('publicIPAddresses_storagetest_vmPublicIP_name'))]",
+                "[resourceId('Microsoft.Network/virtualNetworks/', variables('virtualNetworks_storagetest_vmVNET_name'))]"
+            ],
+            "properties": {
+                "provisioningState": "Succeeded",
+                "ipConfigurations": [
+                    {
+                        "name": "ipconfigstoragetest-vm",
+                        "properties": {
+                            "provisioningState": "Succeeded",
+                            "privateIPAddress": "10.0.0.4",
+                            "privateIPAllocationMethod": "Static",
+                            "publicIPAddress": {
+                                "id": "[resourceId('Microsoft.Network/publicIPAddresses', variables('publicIPAddresses_storagetest_vmPublicIP_name'))]"
+                            },
+                            "subnet": {
+                                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('virtualNetworks_storagetest_vmVNET_name'), 'storagetest-vmSubnet')]"
+                            },
+                            "primary": true,
+                            "privateIPAddressVersion": "IPv4"
+                        }
+                    }
+                ],
+                "enableAcceleratedNetworking": true,
+                "enableIPForwarding": false
+            }
+        }
+    ]
+}
