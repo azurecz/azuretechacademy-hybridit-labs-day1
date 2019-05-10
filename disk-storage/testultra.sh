@@ -53,12 +53,12 @@ echo "UUID=$(blkid | grep -oP '/dev/sdk1: UUID="*"\K[^"]*')   /disk/cached   ext
 chmod go+w /disk/cached
 
 # Ultra SSD
-# (echo n; echo p; echo 1; echo; echo; echo w) | fdisk /dev/sdj > /dev/null 
-# mkfs -t ext4 /dev/sdj1 > /dev/null 
-# mkdir -p /disk/ultrassd 
-# mount /dev/sdj1 /disk/ultrassd
-# echo "UUID=$(blkid | grep -oP '/dev/sdj1: UUID="*"\K[^"]*')   /disk/ultrassd   ext4   defaults   1   2" >> /etc/fstab
-# chmod go+w /disk/ultrassd
+(echo n; echo p; echo 1; echo; echo; echo w) | fdisk /dev/sdl > /dev/null 
+mkfs -t ext4 /dev/sdl1 > /dev/null 
+mkdir -p /disk/ultrassd 
+mount /dev/sdl1 /disk/ultrassd
+echo "UUID=$(blkid | grep -oP '/dev/sdl1: UUID="*"\K[^"]*')   /disk/ultrassd   ext4   defaults   1   2" >> /etc/fstab
+chmod go+w /disk/ultrassd
 
 echo "Installing FIO..."
 
@@ -328,7 +328,7 @@ fio --runtime $1 s-hdd-sync.ini | tee s-hdd-sync.results
 fio --runtime $1 s-ssd-sync.ini | tee s-ssd-sync.results
 fio --runtime $1 lvm-sync.ini | tee lvm-sync.results
 fio --runtime $1 p-ssd-sync.ini | tee p-ssd-sync.results
-# fio --runtime $1 u-ssd-sync.ini | tee u-ssd-sync.results
+fio --runtime $1 u-ssd-sync.ini | tee u-ssd-sync.results
 fio --runtime $1 l-ssd-sync.ini | tee l-ssd-sync.results
 
 echo "Running async write tests"
@@ -336,7 +336,7 @@ fio --runtime $1 s-hdd-async.ini | tee s-hdd-async.results
 fio --runtime $1 s-ssd-async.ini | tee s-ssd-async.results
 fio --runtime $1 lvm-async.ini | tee lvm-async.results
 fio --runtime $1 p-ssd-async.ini | tee p-ssd-async.results
-# fio --runtime $1 u-ssd-async.ini | tee u-ssd-async.results
+fio --runtime $1 u-ssd-async.ini | tee u-ssd-async.results
 fio --runtime $1 l-ssd-async.ini | tee l-ssd-async.results
 
 echo "Running cache tests"

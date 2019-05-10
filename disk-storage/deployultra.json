@@ -450,7 +450,7 @@
                     "skipDos2Unix": false
                 },
                 "protectedSettings": {
-                    "commandToExecute": "[concat('sudo ./test.sh ', parameters('time'))]",
+                    "commandToExecute": "[concat('sudo ./testultra.sh ', parameters('time'))]",
                     "fileUris": [
                         "[variables('scriptLocation')]"
                     ]
