@@ -3,7 +3,7 @@
 
 As some labs take long time to deploy, we will start deployment now and watch results later.
 
-Deploy Azure Disk storage test. There are 10 tests to be run so select reasonable test time to finish, select 300 seconds.
+Deploy Azure Disk storage test. There are 12 tests to be run so select reasonable test time to finish. Also note VM extension has script running time limited to 90 minutes so if you need to run tests with long times (such as 60 minutes per test) choose 1 seconds and rerun script manualy (sudo /var/lib/waagent/custom-script/download/0/test.sh 600). For our lab select 120 seconds.
 
 <a href="https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fazurecz%2Fazuretechacademy-hybridit-labs-day1%2Fmaster%2Fdisk-storage%2Fdeploy.json" target="_blank">
     <img src="http://azuredeploy.net/deploybutton.png"/>
