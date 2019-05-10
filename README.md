@@ -17,8 +17,18 @@ Deploy networking lab environment
 
 ## Compute
 
+### Azure Backup
+1. Create Windows VM
+2. Enable backup and create Backup Vault
+3. Initiate backup by clicking Backup Now (it will create app-consistent snapshot by orchestrating with VSS in about 20 minutes and then we have to wait about 1 hour untill backup is transfered from snapshot to vault)
+4. Go to existing backup and click on restore file, map backup as iSCSI disk to your notebook following instructions
+5. Unmount backup
+6. Restore whole VM
+7. Configure storage account and create file share
+8. Go to backup vault and enable file share backup
+
 ## Storage
-### Performance decisions
+### Disk storage performance decisions
 Connect to storagetest VM you have deployed previously and check results of storage test. Types of disks are:
 * Standard HDD S20 /disk/standardhdd (sdc)
 * Standard SSD E20 /disk/standardssd (sdd)
