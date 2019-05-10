@@ -24,8 +24,6 @@ Deploy networking lab environment
 4. Go to existing backup and click on restore file, map backup as iSCSI disk to your notebook following instructions
 5. Unmount backup
 6. Restore whole VM. You can either create new VM or replace existing (when replacing existing VM needs to be stopped first)
-7. Configure storage account and create file share
-8. Go to backup vault and enable file share backup
 
 ## Storage
 ### Disk storage performance decisions
@@ -61,7 +59,39 @@ What to expect:
 * LVM IOPS with Standard SSDs is close to same size Premium SSD, but there is operational overhead to setup LVM and latency is more consistent with Premium SSD
 * You can easily hit disk IOPS limit and achieve little more then specified
 * With Local SSD you are reaching limit of your VM size, not storage limit (if you need extreme local non-redundant performance check L-series VMs)
-* Always be aware of VM size limits, it makes no sense to buy P70 disk when connected to D2s_v3 VM type
+* Always be aware of VM size limits, it makes no sense to buy P70 disk when connected to D2s_v3 VM type [https://docs.microsoft.com/en-us/azure/virtual-machines/windows/sizes](https://docs.microsoft.com/en-us/azure/virtual-machines/windows/sizes)
+
+## Blob Storage
+1. Create storage account v2
+2. Create container and upload some files
+3. Use Storage Explorer to generate SAS token to access file
+4. Move one file to Cool tier
+5. Move one file to Archive tier
+6. Create policy to automatically manage lifecycle of files:
+   1. Move file to Cool after 1 day of inactivity
+   2. Move file to Archive after 2 days of inactivity
+   3. Delete file after 3 days of inactivity
+7. Setup immutable policy so files in particular container cannot be removed for 2 days
+8. Enable soft delete and observe behavior
+9. Large-scale file copy with AzCopy v10
+   1.  Install AzCopy v10 on it [https://docs.microsoft.com/cs-cz/azure/storage/common/storage-use-azcopy-v10](https://docs.microsoft.com/cs-cz/azure/storage/common/storage-use-azcopy-v10)
+   2.  Use AzCopy to copy file from local to blob storage
+10. Large-scale automated file copy with Data Box Gateway
+    1.  Download Azure Data Box Gateway and install it in your hypervisor (use your PC or nested virtualization in Azure using Dv3 or Ev3 machine instance)
+    2.  Connect Data Box to Azure and associate with storage account
+    3.  Setup copy policies and rate limit
+    4.  Via Azure portal create SMB share on your Data Box
+    5.  Copy files locally to Data Box and observe files being synchronized to storage account in Azure
+
+## Azure Files
+1. Open storage account v2 create in previous step
+2. Create file share
+3. Map share to your local PC (Windows 10) via SMB3 or to VM in Azure (Windows or Linux)
+4. Create text file and copy it to share
+5. In Azure create snapshot of your share
+6. Modify text file locally and make sure change propages to Azure
+7. In your local Explorer right click on file and go to previous versions so you are able to restore previous version of your file
+8. Setup Azure Backup to orchestrate snapshotting and backup of your Azure Files
 
 ## Networking
 Follow network diagram and instructions in following repo to test comple of networking scenarios:
@@ -95,5 +125,5 @@ Investigate invetory tracking for list of installed components and applications 
 ### Integrated configuration management with PowerShell DSC
 Import PowerShell DSC to install IIS, onboard VM to Azure Automation Configuration Management and check IIS is getting installed.
 
-## You homework
+## Your homework
 TBD
