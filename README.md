@@ -36,7 +36,7 @@ Connect to storagetest VM you have deployed previously and check results of stor
 * 2x small Standard HDD with different cache settings /disk/uncached and /disk/cached
 * (UltraSSD) - this is in private preview and requires being enrolled to it. Therefore there is separate template and test script for those who have been whitelisted to preview
 
-Three tests are run on each volume:
+Three tests are run:
 * sync test random write (waiting for ACK after each transaction simulating legacy workload)
 * async test random write (256 bulk operations with 4 threads simulating database workload)
 * async test random read test comparing cached and non-cached performance
@@ -52,7 +52,7 @@ ssh storage@$ip
 How to read results:
 * In /root you will find couple of *.results files with output from FIO tool
 * Check IOPS (with multiple writers sum IOPS of each writer) - line write: IOPS=
-* Check latency on sync tests, especialy clat percentiles (focus 50th and 99th)
+* Check latency on sync tests, especialy clat percentiles (focus on 50th and 99th)
 
 What to expect:
 * For sync legacy-type access latency is most important factor for IOPS. Multiple disk does not help
