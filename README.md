@@ -97,8 +97,41 @@ What to expect:
 8. Setup Azure Backup to orchestrate snapshotting and backup of your Azure Files
 
 ## Networking
+### Enterprise network scenario
 Follow network diagram and instructions in following repo to test comple of networking scenarios:
 [https://github.com/tkubica12/azure-networking-lab](https://github.com/tkubica12/azure-networking-lab)
+
+### Network performance testing
+Deploy following template that will create two VMs in zone 1 and one VM in zone 2 and install throutput testing tool iperf and latency testing tool qperf.
+
+<a href="https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fazurecz%2Fazuretechacademy-hybridit-labs-day1%2Fmaster%2Fnetwork-performance%2Fdeploy.json" target="_blank">
+    <img src="http://azuredeploy.net/deploybutton.png"/>
+</a>
+
+Connect to z1-vm1
+```bash
+export z1-vm1=$(az network public-ip show -n z1-vm1-ip -g netperf --query ipAddress -o tsv)
+ssh net@$z1-vm1
+```
+
+Test bandwidth to vm2 in the same zone and vm3 in different zone.
+```bash
+sudo iperf -c z1-vm2
+sudo iperf -c z2-vm3
+```
+
+Test latency to vm2 in the same zone and vm3 in different zone.
+```bash
+qperf -t 10 -v z1-vm2 tcp_lat udp_lat
+```
+
+What we expect to happen?
+* Network througput will be close to performance specified in documentation (8 Gbps for Standard_D16s_v3)
+* Network throughput is pretty much the same within and across zone
+* Thanks to accelerated networking available on some machines including Standard_D16_v3 latency is very good
+* Latency inside zone is better than latency across zones (2x)
+* Do not use ping to test latency - it has very low priority in Azure network as well as OS TCP/IP stack
+* Do not use file copy to test network throughput as storage can be most limiting factor
 
 ## Disaster recovery with Azure Site Recovery
 TBD
