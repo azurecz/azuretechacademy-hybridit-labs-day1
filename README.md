@@ -34,6 +34,7 @@ Connect to storagetest VM you have deployed previously and check results of stor
 * 4x Standard SSD E10 in LVM pool /disk/vg/lv (sdf, sdg, sdh, sdi)
 * Local SSD /mnt (sdb)
 * 2x small Standard HDD with different cache settings /disk/uncached and /disk/cached
+* (UltraSSD) - this is in private preview and requires being enrolled to it. Therefore there is separate template and test script for those who have been whitelisted to preview
 
 Three tests are run on each volume:
 * sync test random write (waiting for ACK after each transaction simulating legacy workload)
@@ -60,6 +61,7 @@ What to expect:
 * You can easily hit disk IOPS limit and achieve little more then specified
 * With Local SSD you are reaching limit of your VM size, not storage limit (if you need extreme local non-redundant performance check L-series VMs)
 * Always be aware of VM size limits, it makes no sense to buy P70 disk when connected to D2s_v3 VM type [https://docs.microsoft.com/en-us/azure/virtual-machines/windows/sizes](https://docs.microsoft.com/en-us/azure/virtual-machines/windows/sizes)
+* UltraSSD performance is very high - check latency on 50th and 99th percentile, provisioned IOPS set to 14k to demonstrate you are limited by 12800 IOPS of D8s VM (actually it gets slightly higher). You can change provisioned IOPS for UltraSSD without turning VM off!
 
 ## Blob Storage
 1. Create storage account v2 GRS-RA
