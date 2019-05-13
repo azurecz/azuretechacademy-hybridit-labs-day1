@@ -99,7 +99,33 @@ Follow network diagram and instructions in following repo to test comple of netw
 [https://github.com/tkubica12/azure-networking-lab](https://github.com/tkubica12/azure-networking-lab)
 
 ## Disaster recovery with Azure Site Recovery
-TBD
+We will work on scenario when IP address will retain during failover, check this [link](https://docs.microsoft.com/en-us/azure/site-recovery/site-recovery-retain-ip-azure-vm-failover#subnet-failover).
+
+### Prepare this design
+![Schema](asr/schema.png)
+
+Use attached [scripts](asr/scripts.ps1).
+
+Steps
+- create vnets with peerings
+- create primary Windows AD server with DNS zone
+- setup DNS on vnets and join web server in Active Directory
+- create app web server and configure IIS
+
+### Configure ASR replication
+Follow this steps https://docs.microsoft.com/en-us/azure/site-recovery/azure-to-azure-tutorial-enable-replication
+
+### Test failover 
+Try to access website after failover.
+
+### Homework
+Complete this scenario
+![Schema](asr/schema-extended.png)
+
+Challenges
+- DNS routing
+- complete scripts for deployment with infrastructure automation - dsc etc.
+- complete scripts for failover - loadbalancer etc.
 
 ## VM monitoring
 ### VM Health and service map
