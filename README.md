@@ -107,7 +107,7 @@ Follow network diagram and instructions in following repo to test comple of netw
 [https://github.com/tkubica12/azure-networking-lab](https://github.com/tkubica12/azure-networking-lab)
 
 ### Network performance testing
-Deploy following template that will create two VMs in zone 1 and one VM in zone 2 and install throutput testing tool iperf and latency testing tool qperf.
+Deploy following template (eg. to netperf resource group) that will create 2x VM in zone 1 + 1x VM in zone 2 + 1x VM in different region and install throughput testing tool iperf and latency testing tool qperf.
 
 <a href="https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fazurecz%2Fazuretechacademy-hybridit-labs-day1%2Fmaster%2Fnetwork-performance%2Fdeploy.json" target="_blank">
     <img src="http://azuredeploy.net/deploybutton.png"/>
