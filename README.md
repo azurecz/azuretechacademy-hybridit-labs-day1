@@ -16,6 +16,9 @@ Deploy networking lab environment
 </a>
 
 ## Compute
+![Schema](compute/schema.png)
+
+Use attached [scripts](compute/scripts.ps1).
 
 ### Azure Backup
 1. Create Windows VM
