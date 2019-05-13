@@ -10,6 +10,7 @@
         },
         "time": {
             "type": "string",
+            "defaultValue": "120",
             "metadata": {
                 "description": "Test duration in seconds"
             }

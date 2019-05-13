@@ -34,8 +34,9 @@ Connect to storagetest VM you have deployed previously and check results of stor
 * 4x Standard SSD E10 in LVM pool /disk/vg/lv (sdf, sdg, sdh, sdi)
 * Local SSD /mnt (sdb)
 * 2x small Standard HDD with different cache settings /disk/uncached and /disk/cached
+* (UltraSSD) - this is in private preview and requires being enrolled to it. Therefore there is separate template and test script for those who have been whitelisted to preview
 
-Three tests are run on each volume:
+Three tests are run:
 * sync test random write (waiting for ACK after each transaction simulating legacy workload)
 * async test random write (256 bulk operations with 4 threads simulating database workload)
 * async test random read test comparing cached and non-cached performance
@@ -51,7 +52,7 @@ ssh storage@$ip
 How to read results:
 * In /root you will find couple of *.results files with output from FIO tool
 * Check IOPS (with multiple writers sum IOPS of each writer) - line write: IOPS=
-* Check latency on sync tests, especialy clat percentiles (focus 50th and 99th)
+* Check latency on sync tests, especialy clat percentiles (focus on 50th and 99th)
 
 What to expect:
 * For sync legacy-type access latency is most important factor for IOPS. Multiple disk does not help
@@ -60,6 +61,7 @@ What to expect:
 * You can easily hit disk IOPS limit and achieve little more then specified
 * With Local SSD you are reaching limit of your VM size, not storage limit (if you need extreme local non-redundant performance check L-series VMs)
 * Always be aware of VM size limits, it makes no sense to buy P70 disk when connected to D2s_v3 VM type [https://docs.microsoft.com/en-us/azure/virtual-machines/windows/sizes](https://docs.microsoft.com/en-us/azure/virtual-machines/windows/sizes)
+* UltraSSD performance is very high - check latency on 50th and 99th percentile, provisioned IOPS set to 14k to demonstrate you are limited by 12800 IOPS of D8s VM (actually it gets slightly higher). You can change provisioned IOPS for UltraSSD without turning VM off!
 
 ## Blob Storage
 1. Create storage account v2 GRS-RA
@@ -95,8 +97,46 @@ What to expect:
 8. Setup Azure Backup to orchestrate snapshotting and backup of your Azure Files
 
 ## Networking
+### Enterprise network scenario
 Follow network diagram and instructions in following repo to test comple of networking scenarios:
 [https://github.com/tkubica12/azure-networking-lab](https://github.com/tkubica12/azure-networking-lab)
+
+### Network performance testing
+Deploy following template that will create two VMs in zone 1 and one VM in zone 2 and install throutput testing tool iperf and latency testing tool qperf.
+
+<a href="https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fazurecz%2Fazuretechacademy-hybridit-labs-day1%2Fmaster%2Fnetwork-performance%2Fdeploy.json" target="_blank">
+    <img src="http://azuredeploy.net/deploybutton.png"/>
+</a>
+
+Connect to z1-vm1
+```bash
+export z1vm1=$(az network public-ip show -n z1-vm1-ip -g netperf --query ipAddress -o tsv)
+ssh net@$z1vm1
+```
+
+Test bandwidth to vm2 in the same zone, vm3 in different zone and VM in different region.
+```bash
+sudo iperf -c z1-vm2
+sudo iperf -c z2-vm3
+sudo iperf -c 10.1.0.4   # secondary region via VNET peering
+```
+
+Test latency to vm2 in the same zone and vm3 in different zone.
+```bash
+qperf -t 10 -v z1-vm2 tcp_lat udp_lat
+qperf -t 10 -v z2-vm3 tcp_lat udp_lat
+qperf -t 10 -v 10.1.0.4 tcp_lat udp_lat
+```
+
+What we expect to happen and what to do?
+* Network througput will be close to performance specified in documentation (8 Gbps for Standard_D16s_v3)
+* Network throughput is pretty much the same within and across zone
+* Throughput between regions is (as expected) significantly lower, but still very good for WAN connection
+* Thanks to accelerated networking available on some machines including Standard_D16_v3 latency is very good
+* Latency inside zone is better than latency across zones, but still very good (suitable for sync operations)
+* Latency between regions is good for WAN link, but obviously suited more for async operations 
+* Do not use ping to test latency - it has very low priority in Azure network as well as OS TCP/IP stack
+* Do not use file copy to test network throughput as storage can be most limiting factor
 
 ## Disaster recovery with Azure Site Recovery
 We will work on scenario when IP address will retain during failover, check this [link](https://docs.microsoft.com/en-us/azure/site-recovery/site-recovery-retain-ip-azure-vm-failover#subnet-failover).
