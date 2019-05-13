@@ -114,15 +114,18 @@ export z1-vm1=$(az network public-ip show -n z1-vm1-ip -g netperf --query ipAddr
 ssh net@$z1-vm1
 ```
 
-Test bandwidth to vm2 in the same zone and vm3 in different zone.
+Test bandwidth to vm2 in the same zone, vm3 in different zone and VM in different region.
 ```bash
 sudo iperf -c z1-vm2
 sudo iperf -c z2-vm3
+sudo iperf -c 10.1.0.4   # secondary region via VNET peering
 ```
 
 Test latency to vm2 in the same zone and vm3 in different zone.
 ```bash
 qperf -t 10 -v z1-vm2 tcp_lat udp_lat
+qperf -t 10 -v z2-vm3 tcp_lat udp_lat
+qperf -t 10 -v 10.1.0.4 tcp_lat udp_lat
 ```
 
 What we expect to happen?
