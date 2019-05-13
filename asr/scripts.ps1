@@ -65,7 +65,7 @@ Enable-WindowsOptionalFeature -Online -FeatureName IIS-WebServer
 Enable-WindowsOptionalFeature -Online -FeatureName IIS-CommonHttpFeatures
 
 ## clean up -> delete all
-$rgvmad = "akademieaz-vmad-rg"
+$rgvmad = "akademie-vmad-rg"
 az group delete -n $rgvmad --yes
 $rgvmweb = "akademie-vmweb-rg"
 az group delete -n $rgvmweb --yes
