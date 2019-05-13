@@ -16,6 +16,9 @@ Deploy networking lab environment
 </a>
 
 ## Compute (60 minutes limit)
+![Schema](compute/schema.png)
+
+Use attached [scripts](compute/scripts.ps1).
 
 ### Azure Backup
 Note: It takes some time for Backup to be ready. Follow steps 1-3 and then we will continue with next section. After about 1 hour we will come back to continue from step 4.
