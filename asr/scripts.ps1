@@ -63,15 +63,3 @@ Add-Computer -DomainName corp.cp.com -Restart
 Enable-WindowsOptionalFeature -Online -FeatureName IIS-WebServerRole
 Enable-WindowsOptionalFeature -Online -FeatureName IIS-WebServer
 Enable-WindowsOptionalFeature -Online -FeatureName IIS-CommonHttpFeatures
-
-## clean up -> delete all
-$rgvmad = "akademie-vmad-rg"
-az group delete -n $rgvmad --yes
-$rgvmweb = "akademie-vmweb-rg"
-az group delete -n $rgvmweb --yes
-$rgc = "akademie-central-rg"
-az group delete -n $rgc --yes
-$rgapp = "akademie-app-rg"
-az group delete -n $rgapp --yes
-$rgappasr = "akademie-app-asr-rg"
-az group delete -n $rgappasr --yes

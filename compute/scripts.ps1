@@ -14,13 +14,16 @@ az network vnet create -g $rgapp -n cp-app1-we-vnet -l westeurope --address-pref
 ## peer networks
 # TODO: peer central with app
 
+## create storage account for diagnostics (use by --boot-diagnostics-storage)
+$st="https://<YOUR NAME>.blob.core.windows.net/"
+
 # Create servers
 ## create primary Windows AD server
 $rgvmad = "akademie-vmad-rg"
 az group create -n $rgvmad -l westeurope
 # create windows server in central network with RDP - name: cp-vmad
 $advnetsub1=$(az network vnet subnet show -g $rgc --vnet-name cp-central-we-vnet -n sub1 --query id -o json)
-az vm create -g $rgvmad -n cp-vmad --image Win2016Datacenter --size Standard_B2ms --subnet $advnetsub1 --admin-username cpadmin
+az vm create -g $rgvmad -n cp-vmad --image Win2016Datacenter --size Standard_B2ms --subnet $advnetsub1 --boot-diagnostics-storage $st --admin-username cpadmin
 # connect RDP and install Windows Active Directory with DNS zone
 Install-WindowsFeature AD-Domain-Services
 Import-Module ADDSDeployment
@@ -43,8 +46,9 @@ Set-DnsServerForwarder -IPAddress "168.63.129.16" -PassThru
 $rgvmjump = "akademie-vmjump-rg"
 az group create -n $rgvmjump -l westeurope
 # create ubuntu server in central network with SSH - name: cp-vmjump
+az storage account create -g $rgvmjump -n cpvmjump --sku Standard_LRS
 $advnetsub1=$(az network vnet subnet show -g $rgc --vnet-name cp-central-we-vnet -n sub1 --query id -o json)
-az vm create -g $rgvmjump -n cp-vmjump --image Ubuntu --size Standard_B2s --subnet $advnetsub1 --authentication-type password --admin-username cpadmin
+az vm create -g $rgvmjump -n cp-vmjump --image UbuntuLTS --size Standard_B2s --subnet $advnetsub1 --authentication-type password --boot-diagnostics-storage $st --admin-username cpadmin
 
 ## create APP server
 $rgvmweb = "akademie-vmweb-rg"
@@ -63,13 +67,3 @@ Add-Computer -DomainName corp.cp.com -Restart
 Enable-WindowsOptionalFeature -Online -FeatureName IIS-WebServerRole
 Enable-WindowsOptionalFeature -Online -FeatureName IIS-WebServer
 Enable-WindowsOptionalFeature -Online -FeatureName IIS-CommonHttpFeatures
-
-## clean up -> delete all
-$rgvmad = "akademie-vmad-rg"
-az group delete -n $rgvmad --yes
-$rgvmweb = "akademie-vmweb-rg"
-az group delete -n $rgvmweb --yes
-$rgc = "akademie-central-rg"
-az group delete -n $rgc --yes
-$rgapp = "akademie-app-rg"
-az group delete -n $rgapp --yes
