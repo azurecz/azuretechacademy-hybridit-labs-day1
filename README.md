@@ -1,5 +1,5 @@
 # Azure Technical Academy - Hybrid IT track 01
-
+In first day of Azure Acedemy in Hybrid IT track we will focus on compute, storage, networking, backup, DR and monitoring. Each section comes with lot of content and time limit for each section. Try to finish as much as you can. What is left, take as homework.
 
 As some labs take long time to deploy, we will start deployment now and watch results later.
 
@@ -15,20 +15,22 @@ Deploy networking lab environment
     <img src="http://azuredeploy.net/deploybutton.png"/>
 </a>
 
-## Compute
+## Compute (60 minutes limit)
 ![Schema](compute/schema.png)
 
 Use attached [scripts](compute/scripts.ps1).
 
 ### Azure Backup
+Note: It takes some time for Backup to be ready. Follow steps 1-3 and then we will continue with next section. After about 1 hour we will come back to continue from step 4.
+
 1. Create Windows VM
 2. Enable backup and create Backup Vault
-3. Initiate backup by clicking Backup Now (it will create app-consistent snapshot by orchestrating with VSS in about 20 minutes and then we have to wait about 1 hour untill backup is transfered from snapshot to vault)
+3. Initiate backup by clicking Backup Now (it will create app-consistent snapshot by orchestrating with VSS in about 20 minutes and then we have to wait about 1 hour until backup is transfered from snapshot to vault)
 4. Go to existing backup and click on restore file, map backup as iSCSI disk to your notebook following instructions
 5. Unmount backup
 6. Restore whole VM. You can either create new VM or replace existing (when replacing existing VM needs to be stopped first)
 
-## Storage
+## Storage (90 minutes limit)
 ### Disk storage performance decisions
 Connect to storagetest VM you have deployed previously and check results of storage test. Types of disks are:
 * Standard HDD S20 /disk/standardhdd (sdc)
@@ -66,7 +68,7 @@ What to expect:
 * Always be aware of VM size limits, it makes no sense to buy P70 disk when connected to D2s_v3 VM type [https://docs.microsoft.com/en-us/azure/virtual-machines/windows/sizes](https://docs.microsoft.com/en-us/azure/virtual-machines/windows/sizes)
 * UltraSSD performance is very high - check latency on 50th and 99th percentile, provisioned IOPS set to 14k to demonstrate you are limited by 12800 IOPS of D8s VM (actually it gets slightly higher). You can change provisioned IOPS for UltraSSD without turning VM off!
 
-## Blob Storage
+### Blob Storage
 1. Create storage account v2 GRS-RA
 2. Create container and upload some files
 3. Use Storage Explorer to generate SAS token to access file
@@ -89,7 +91,7 @@ What to expect:
     4.  Via Azure portal create SMB share on your Data Box
     5.  Copy files locally to Data Box and observe files being synchronized to storage account in Azure
 
-## Azure Files
+### Azure Files
 1. Open storage account v2 create in previous step
 2. Create file share
 3. Map share to your local PC (Windows 10) via SMB3 or to VM in Azure (Windows or Linux)
@@ -99,7 +101,7 @@ What to expect:
 7. In your local Explorer right click on file and go to previous versions so you are able to restore previous version of your file
 8. Setup Azure Backup to orchestrate snapshotting and backup of your Azure Files
 
-## Networking
+## Networking (90 minutes limit)
 ### Enterprise network scenario
 Follow network diagram and instructions in following repo to test comple of networking scenarios:
 [https://github.com/tkubica12/azure-networking-lab](https://github.com/tkubica12/azure-networking-lab)
@@ -141,7 +143,7 @@ What we expect to happen and what to do?
 * Do not use ping to test latency - it has very low priority in Azure network as well as OS TCP/IP stack
 * Do not use file copy to test network throughput as storage can be most limiting factor
 
-## Disaster recovery with Azure Site Recovery
+## Disaster recovery with Azure Site Recovery (90 minutes)
 We will work on scenario when IP address will retain during failover, check this [link](https://docs.microsoft.com/en-us/azure/site-recovery/site-recovery-retain-ip-azure-vm-failover#subnet-failover).
 
 ### Prepare this design
@@ -170,7 +172,7 @@ Challenges
 - complete scripts for deployment with infrastructure automation - dsc etc.
 - complete scripts for failover - loadbalancer etc.
 
-## VM monitoring
+## VM monitoring (90 minutes limit)
 ### VM Health and service map
 Onboard VM to Azure monitor and check VM health page, performance metrics and service map
 
@@ -195,5 +197,11 @@ Investigate invetory tracking for list of installed components and applications 
 ### Integrated configuration management with PowerShell DSC
 Import PowerShell DSC to install IIS, onboard VM to Azure Automation Configuration Management and check IIS is getting installed.
 
-## Your homework
-TBD
+# Homework 1
+Today we had a lot to cover and you might not have finished everything. As your homework redo the lab and finish all items there. You will have couple of week to do so. Follow documentation and chat with your peers in your Teams.
+
+# Homework 2 - bridge to next training
+After couple of weeks you will be assigned with additional homework - check Teams for details as they become available. You will have 1-2 months to finish this and provide required outputs privately to instructors. Check for notifications in Teams.
+
+# Homework 3 - preparation for next training
+2 weeks before next training you will receive full agenda and few instructions to check you are familiar with basics and study/practice should you need to get better prepared for next training.
