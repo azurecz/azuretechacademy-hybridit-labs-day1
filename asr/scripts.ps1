@@ -24,7 +24,9 @@ az network vnet create -g $rgappasr -n cp-app1-asr-vnet -l northeurope --address
 ## create primary Windows AD server
 $rgvmad = "akademie-vmad-rg"
 az group create -n $rgvmad -l westeurope
-# TODO create windows server in central network with RDP - name: cp-vmad
+# create windows server in central network with RDP - name: cp-vmad
+$advnetsub1=$(az network vnet subnet show -g $rgc --vnet-name cp-central-we-vnet -n sub1 --query id -o json)
+az vm create -g $rgvmad -n cp-vmad --image Win2016Datacenter --size Standard_B2ms --subnet $advnetsub1 --admin-username cpadmin
 # connect RDP and install Windows Active Directory with DNS zone
 Install-WindowsFeature AD-Domain-Services
 Import-Module ADDSDeployment
@@ -61,3 +63,15 @@ Add-Computer -DomainName corp.cp.com -Restart
 Enable-WindowsOptionalFeature -Online -FeatureName IIS-WebServerRole
 Enable-WindowsOptionalFeature -Online -FeatureName IIS-WebServer
 Enable-WindowsOptionalFeature -Online -FeatureName IIS-CommonHttpFeatures
+
+## clean up -> delete all
+$rgvmad = "akademieaz-vmad-rg"
+az group delete -n $rgvmad --yes
+$rgvmweb = "akademie-vmweb-rg"
+az group delete -n $rgvmweb --yes
+$rgc = "akademie-central-rg"
+az group delete -n $rgc --yes
+$rgapp = "akademie-app-rg"
+az group delete -n $rgapp --yes
+$rgappasr = "akademie-app-asr-rg"
+az group delete -n $rgappasr --yes
