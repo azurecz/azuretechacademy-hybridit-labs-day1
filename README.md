@@ -110,8 +110,8 @@ Deploy following template that will create two VMs in zone 1 and one VM in zone 
 
 Connect to z1-vm1
 ```bash
-export z1-vm1=$(az network public-ip show -n z1-vm1-ip -g netperf --query ipAddress -o tsv)
-ssh net@$z1-vm1
+export z1vm1=$(az network public-ip show -n z1-vm1-ip -g netperf --query ipAddress -o tsv)
+ssh net@$z1vm1
 ```
 
 Test bandwidth to vm2 in the same zone, vm3 in different zone and VM in different region.
@@ -128,11 +128,13 @@ qperf -t 10 -v z2-vm3 tcp_lat udp_lat
 qperf -t 10 -v 10.1.0.4 tcp_lat udp_lat
 ```
 
-What we expect to happen?
+What we expect to happen and what to do?
 * Network througput will be close to performance specified in documentation (8 Gbps for Standard_D16s_v3)
 * Network throughput is pretty much the same within and across zone
+* Throughput between regions is (as expected) significantly lower, but still very good for WAN connection
 * Thanks to accelerated networking available on some machines including Standard_D16_v3 latency is very good
-* Latency inside zone is better than latency across zones (2x)
+* Latency inside zone is better than latency across zones, but still very good (suitable for sync operations)
+* Latency between regions is good for WAN link, but obviously suited more for async operations 
 * Do not use ping to test latency - it has very low priority in Azure network as well as OS TCP/IP stack
 * Do not use file copy to test network throughput as storage can be most limiting factor
 
