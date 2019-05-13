@@ -121,27 +121,28 @@ ssh net@$z1vm1
 
 Test bandwidth to vm2 in the same zone, vm3 in different zone and VM in different region.
 ```bash
-sudo iperf -c z1-vm2
-sudo iperf -c z2-vm3
-sudo iperf -c 10.1.0.4   # secondary region via VNET peering
+sudo iperf -c z1-vm2 -i 1 -t 30
+sudo iperf -c z2-vm3 -i 1 -t 30
+sudo iperf -c 10.1.0.4 -i 1 -t 30  # secondary region via VNET peering
+sudo iperf -c 10.1.0.4 -P16 -t 30  # multiple parallel sessions
 ```
 
 Test latency to vm2 in the same zone and vm3 in different zone.
 ```bash
-qperf -t 10 -v z1-vm2 tcp_lat udp_lat
-qperf -t 10 -v z2-vm3 tcp_lat udp_lat
-qperf -t 10 -v 10.1.0.4 tcp_lat udp_lat
+qperf -t 20 -v z1-vm2 tcp_lat
+qperf -t 20 -v z2-vm3 tcp_lat
+qperf -t 20 -v 10.1.0.4 tcp_lat
 ```
 
 What we expect to happen and what to do?
 * Network througput will be close to performance specified in documentation (8 Gbps for Standard_D16s_v3)
-* Network throughput is pretty much the same within and across zone
-* Throughput between regions is (as expected) significantly lower, but still very good for WAN connection
+* Network throughput is pretty much the same within and across zone, but across zones might fluctulate a bit
+* Throughput between regions is WAN link so expected to be slower. Typical behavior is that with single connection speed is very good, but slower than inside region, but using multiple sessions leads performance close to inside regions (but might fluctulate a bit more)
 * Thanks to accelerated networking available on some machines including Standard_D16_v3 latency is very good
-* Latency inside zone is better than latency across zones, but still very good (suitable for sync operations)
+* Latency inside zone is usually better than latency across zones, but still very good (suitable for sync operations)
 * Latency between regions is good for WAN link, but obviously suited more for async operations 
-* Do not use ping to test latency - it has very low priority in Azure network as well as OS TCP/IP stack
-* Do not use file copy to test network throughput as storage can be most limiting factor
+* **Do not use ping to test latency** - it has very low priority in Azure network as well as OS TCP/IP stack
+* **Do not use file copy to test network throughput** as storage can be most limiting factor
 
 ## Disaster recovery with Azure Site Recovery (90 minutes)
 We will work on scenario when IP address will retain during failover, check this [link](https://docs.microsoft.com/en-us/azure/site-recovery/site-recovery-retain-ip-azure-vm-failover#subnet-failover).
