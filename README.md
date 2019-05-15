@@ -200,18 +200,27 @@ Import PowerShell DSC to install IIS, onboard VM to Azure Automation Configurati
 
 # Track1
 Prerequisites: Azure Subscription
+Azure Subscription with 100 cores quota
 
 Training:
 - Compute
-- Networking
 - Storage
+- Networking
 
 # Track2
 Prerequisites: Compute lab completed
+Azure Subscription with 100 cores quota
+
+Notebook with:
+- Azure CLI
+- Visual Studio Code
+- Azure Storage Explorer
 
 Training:
 - Backup
 - ASR
+- Monitoring
+- VM operations
 
 # Homework 1
 Today we had a lot to cover and you might not have finished everything. As your homework redo the lab and finish all items there. You will have couple of week to do so. Follow documentation and chat with your peers in your Teams.
