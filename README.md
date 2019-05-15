@@ -198,18 +198,20 @@ Investigate invetory tracking for list of installed components and applications 
 ### Integrated configuration management with PowerShell DSC
 Import PowerShell DSC to install IIS, onboard VM to Azure Automation Configuration Management and check IIS is getting installed.
 
-# Track1
-Prerequisites: Azure Subscription
-Azure Subscription with 100 cores quota
+# Agenda and next steps 
+
+## Track1
+Prerequisites: Azure Subscription with 100 cores quota
 
 Training:
 - Compute
 - Storage
 - Networking
 
-# Track2
+Dates: Prague 15.5.19, Bratislava 30.5.
+
+## Track2
 Prerequisites: Compute lab completed
-Azure Subscription with 100 cores quota
 
 Notebook with:
 - Azure CLI
@@ -222,11 +224,25 @@ Training:
 - Monitoring
 - VM operations
 
-# Homework 1
+Dates: Prague 28.6.19
+
+## Homework 1
 Today we had a lot to cover and you might not have finished everything. As your homework redo the lab and finish all items there. You will have couple of week to do so. Follow documentation and chat with your peers in your Teams.
 
-# Homework 2 - bridge to next training
+## Homework 2 - bridge to next training
 After couple of weeks you will be assigned with additional homework - check Teams for details as they become available. You will have 1-2 months to finish this and provide required outputs privately to instructors. Check for notifications in Teams.
 
-# Homework 3 - preparation for next training
+## Homework 3 - preparation for next training
 2 weeks before next training you will receive full agenda and few instructions to check you are familiar with basics and study/practice should you need to get better prepared for next training.
+
+## Contacts
+
+### Tomas Kubica - Azure TSP at Microsoft
+- https://www.linkedin.com/in/tkubica
+- https://github.com/tkubica12
+- https://twitter.com/tkubica
+
+### Jaroslav Jindrich - Cloud Solutions Architect
+- https://www.linkedin.com/in/jjindrich
+- https://github.com/jjindrich
+- https://twitter.com/jjindrich_cz
