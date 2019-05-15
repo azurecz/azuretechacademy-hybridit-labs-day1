@@ -32,7 +32,7 @@ Install-ADDSForest `
 -DatabasePath "C:\Windows\NTDS" `
 -DomainMode "Win2012R2" `
 -DomainName "corp.cp.com" `
--DomainNetbiosName "YOURDOMAIN" `
+-DomainNetbiosName "CORP" `
 -ForestMode "Win2012R2" `
 -InstallDns:$true `
 -LogPath "C:\Windows\NTDS" `

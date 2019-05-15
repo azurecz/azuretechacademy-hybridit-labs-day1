@@ -197,6 +197,21 @@ Investigate invetory tracking for list of installed components and applications 
 ### Integrated configuration management with PowerShell DSC
 Import PowerShell DSC to install IIS, onboard VM to Azure Automation Configuration Management and check IIS is getting installed.
 
+# Track1
+Prerequisites: Azure Subscription
+
+Training:
+- Compute
+- Networking
+- Storage
+
+# Track2
+Prerequisites: Compute lab completed
+
+Training:
+- Backup
+- ASR
+
 # Homework 1
 Today we had a lot to cover and you might not have finished everything. As your homework redo the lab and finish all items there. You will have couple of week to do so. Follow documentation and chat with your peers in your Teams.
 
