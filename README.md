@@ -208,7 +208,7 @@ Training:
 - Storage
 - Networking
 
-Dates: Prague 15.5.19, Bratislava 30.5.
+Dates: Prague 15.5.19, Bratislava 4.6.
 
 ## Track2
 Prerequisites: Compute lab completed
