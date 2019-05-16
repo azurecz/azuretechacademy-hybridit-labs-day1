@@ -15,7 +15,7 @@ Deploy networking lab environment
     <img src="http://azuredeploy.net/deploybutton.png"/>
 </a>
 
-## Compute (60 minutes limit)
+## Compute
 ![Schema](compute/schema.png)
 
 Use attached [scripts](compute/scripts.ps1).
@@ -30,7 +30,7 @@ Note: It takes some time for Backup to be ready. Follow steps 1-3 and then we wi
 5. Unmount backup
 6. Restore whole VM. You can either create new VM or replace existing (when replacing existing VM needs to be stopped first)
 
-## Storage (90 minutes limit)
+## Storage
 ### Disk storage performance decisions
 Connect to storagetest VM you have deployed previously and check results of storage test. Types of disks are:
 * Standard HDD S20 /disk/standardhdd (sdc)
@@ -101,7 +101,7 @@ What to expect:
 7. In your local Explorer right click on file and go to previous versions so you are able to restore previous version of your file
 8. Setup Azure Backup to orchestrate snapshotting and backup of your Azure Files
 
-## Networking (90 minutes limit)
+## Networking
 ### Enterprise network scenario
 ![diagram](https://github.com/tkubica12/azure-networking-lab/raw/master/img/diagramNative.png)
 
@@ -146,7 +146,7 @@ What we expect to happen and what to do?
 * **Do not use ping to test latency** - it has very low priority in Azure network as well as OS TCP/IP stack
 * **Do not use file copy to test network throughput** as storage can be most limiting factor
 
-## Disaster recovery with Azure Site Recovery (90 minutes)
+## Disaster recovery with Azure Site Recovery
 We will work on scenario when IP address will retain during failover, check this [link](https://docs.microsoft.com/en-us/azure/site-recovery/site-recovery-retain-ip-azure-vm-failover#subnet-failover).
 
 ### Prepare this design
@@ -175,7 +175,7 @@ Challenges
 - complete scripts for deployment with infrastructure automation - dsc etc.
 - complete scripts for failover - loadbalancer etc.
 
-## VM monitoring (90 minutes limit)
+## VM monitoring
 ### VM Health and service map
 Onboard VM to Azure monitor and check VM health page, performance metrics and service map
 
@@ -246,14 +246,14 @@ After couple of weeks you will be assigned with additional homework - check Team
 ## Homework 3 - preparation for next training
 2 weeks before next training you will receive full agenda and few instructions to check you are familiar with basics and study/practice should you need to get better prepared for next training.
 
-## Contacts
+# Contacts
 
-### Tomas Kubica - Azure TSP at Microsoft
+## Tomas Kubica - Azure TSP at Microsoft
 - https://www.linkedin.com/in/tkubica
 - https://github.com/tkubica12
 - https://twitter.com/tkubica
 
-### Jaroslav Jindrich - Cloud Solutions Architect
+## Jaroslav Jindrich - Cloud Solutions Architect
 - https://www.linkedin.com/in/jjindrich
 - https://github.com/jjindrich
 - https://twitter.com/jjindrich_cz
