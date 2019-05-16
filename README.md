@@ -211,7 +211,16 @@ Training:
 Dates: Prague 15.5.19, Bratislava 4.6.
 
 ## Track2
-Prerequisites: Compute lab completed
+Prerequisites: 
+- Compute lab completed
+- Complete Azure Backup section steps 1-3 (Backup section on VM in portal)
+- Turn on compute lab few days before training to collect data
+- If you want to have more data collected onboard monitoring solutions few days before training in following sections of VM configuration in Portal and use one Log Analytics workspace and Automation Account you will create in wizard:
+  - Update Management
+  - Inventory
+  - Change Tracking
+  - Insights
+  - Enable guest-level monitoring in Diagnostic settings
 
 Notebook with:
 - Azure CLI
