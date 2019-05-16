@@ -15,6 +15,16 @@ Deploy networking lab environment
     <img src="http://azuredeploy.net/deploybutton.png"/>
 </a>
 
+## Structure
+[Compute](https://github.com/azurecz/azuretechacademy-hybridit-labs-day1#compute)
+[Backup](https://github.com/azurecz/azuretechacademy-hybridit-labs-day1#azure-backup)
+[Storage](https://github.com/azurecz/azuretechacademy-hybridit-labs-day1#storage)
+[Networking](https://github.com/azurecz/azuretechacademy-hybridit-labs-day1#networking)
+[Disaster recovery](https://github.com/azurecz/azuretechacademy-hybridit-labs-day1#disaster-recovery-with-azure-site-recovery)
+[Monitoring](https://github.com/azurecz/azuretechacademy-hybridit-labs-day1#vm-monitoring)
+[Agenda and next steps](https://github.com/azurecz/azuretechacademy-hybridit-labs-day1#agenda-and-next-steps)
+[Contacts](https://github.com/azurecz/azuretechacademy-hybridit-labs-day1#contacts)
+
 ## Compute
 ![Schema](compute/schema.png)
 
