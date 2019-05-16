@@ -103,6 +103,8 @@ What to expect:
 
 ## Networking (90 minutes limit)
 ### Enterprise network scenario
+![diagram](https://github.com/tkubica12/azure-networking-lab/raw/master/img/diagramNative.png)
+
 Follow network diagram and instructions in following repo to test comple of networking scenarios:
 [https://github.com/tkubica12/azure-networking-lab](https://github.com/tkubica12/azure-networking-lab)
 
