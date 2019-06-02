@@ -16,6 +16,7 @@ az network vnet create -g $rgapp -n cp-app1-we-vnet -l westeurope --address-pref
 
 ## create storage account for diagnostics (use by --boot-diagnostics-storage)
 $st="https://<YOUR NAME>.blob.core.windows.net/"
+#az storage account create -g $rgvmjump -n cpvmjump --sku Standard_LRS
 
 # Create servers
 ## create primary Windows AD server
@@ -46,7 +47,6 @@ Set-DnsServerForwarder -IPAddress "168.63.129.16" -PassThru
 $rgvmjump = "akademie-vmjump-rg"
 az group create -n $rgvmjump -l westeurope
 # create ubuntu server in central network with SSH - name: cp-vmjump
-az storage account create -g $rgvmjump -n cpvmjump --sku Standard_LRS
 $advnetsub1=$(az network vnet subnet show -g $rgc --vnet-name cp-central-we-vnet -n sub1 --query id -o json)
 az vm create -g $rgvmjump -n cp-vmjump --image UbuntuLTS --size Standard_B2s --subnet $advnetsub1 --authentication-type password --boot-diagnostics-storage $st --admin-username cpadmin
 
