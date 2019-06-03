@@ -1,4 +1,4 @@
-# Azure Technical Academy - Hybrid IT track 01
+# Azure Technical Academy - Hybrid IT Day 1: compute, storage, networking, backup/DR, monitoring
 In first day of Azure Acedemy in Hybrid IT track we will focus on compute, storage, networking, backup, DR and monitoring. Each section comes with lot of content and time limit for each section. Try to finish as much as you can. What is left, take as homework.
 
 As some labs take long time to deploy, we will start deployment now and watch results later.
