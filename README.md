@@ -1,4 +1,4 @@
-# Azure Technical Academy - Hybrid IT track 01
+# Azure Technical Academy - Hybrid IT Day 1: compute, storage, networking, backup/DR, monitoring
 In first day of Azure Acedemy in Hybrid IT track we will focus on compute, storage, networking, backup, DR and monitoring. Each section comes with lot of content and time limit for each section. Try to finish as much as you can. What is left, take as homework.
 
 As some labs take long time to deploy, we will start deployment now and watch results later.
@@ -9,7 +9,7 @@ Deploy Azure Disk storage test. There are 12 tests to be run so select reasonabl
     <img src="http://azuredeploy.net/deploybutton.png"/>
 </a>
 
-Deploy networking lab environment
+Deploy networking lab environment (keep prefix on default or use your own, but only with lowercase letters)
 
 <a href="https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fgithub.com%2Ftkubica12%2Fazure-networking-lab%2Fraw%2Fmaster%2FArmEnv%2Fmain.json" target="_blank">
     <img src="http://azuredeploy.net/deploybutton.png"/>
@@ -77,6 +77,16 @@ What to expect:
 * With Local SSD you are reaching limit of your VM size, not storage limit (if you need extreme local non-redundant performance check L-series VMs)
 * Always be aware of VM size limits, it makes no sense to buy P70 disk when connected to D2s_v3 VM type [https://docs.microsoft.com/en-us/azure/virtual-machines/windows/sizes](https://docs.microsoft.com/en-us/azure/virtual-machines/windows/sizes)
 * UltraSSD performance is very high - check latency on 50th and 99th percentile, provisioned IOPS set to 14k to demonstrate you are limited by 12800 IOPS of D8s VM (actually it gets slightly higher). You can change provisioned IOPS for UltraSSD without turning VM off!
+
+Try to run some of tests yourself:
+```
+sudo -i
+cd /root
+fio --runtime 60 s-hdd-sync.ini
+fio --runtime 60 p-ssd-sync.ini
+fio --runtime 60 s-hdd-async.ini
+fio --runtime 60 p-ssd-async.ini
+```
 
 ### Blob Storage
 1. Create storage account v2 GRS-RA
