@@ -25,7 +25,7 @@ az network vnet create -g $rgappasr -n cp-app1-asr-vnet -l northeurope --address
 $rgvmad = "akademie-vmad-rg"
 az group create -n $rgvmad -l westeurope
 # create windows server in central network with RDP - name: cp-vmad
-$advnetsub1=$(az network vnet subnet show -g $rgc --vnet-name cp-central-we-vnet -n sub1 --query id -o json)
+$advnetsub1=$(az network vnet subnet show -g $rgc --vnet-name cp-central-we-vnet -n sub1 --query id -o tsv)
 az vm create -g $rgvmad -n cp-vmad --image Win2016Datacenter --size Standard_B2ms --subnet $advnetsub1 --admin-username cpadmin
 # connect RDP and install Windows Active Directory with DNS zone
 Install-WindowsFeature AD-Domain-Services
@@ -35,7 +35,7 @@ Install-ADDSForest `
 -DatabasePath "C:\Windows\NTDS" `
 -DomainMode "Win2012R2" `
 -DomainName "corp.cp.com" `
--DomainNetbiosName "YOURDOMAIN" `
+-DomainNetbiosName "CORP" `
 -ForestMode "Win2012R2" `
 -InstallDns:$true `
 -LogPath "C:\Windows\NTDS" `
@@ -63,3 +63,6 @@ Add-Computer -DomainName corp.cp.com -Restart
 Enable-WindowsOptionalFeature -Online -FeatureName IIS-WebServerRole
 Enable-WindowsOptionalFeature -Online -FeatureName IIS-WebServer
 Enable-WindowsOptionalFeature -Online -FeatureName IIS-CommonHttpFeatures
+Enable-WindowsOptionalFeature -Online -FeatureName IIS-WindowsAuthentication
+Set-WebConfiguration system.webServer/security/authentication/anonymousAuthentication -PSPath IIS:\ -Location "Default Web Site" -Value @{enabled="False"}
+Set-WebConfiguration system.webServer/security/authentication/windowsAuthentication -PSPath IIS:\ -Location "Default Web Site" -Value @{enabled="True"}

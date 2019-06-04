@@ -15,15 +15,15 @@ az network vnet create -g $rgapp -n cp-app1-we-vnet -l westeurope --address-pref
 # TODO: peer central with app
 
 ## create storage account for diagnostics (use by --boot-diagnostics-storage)
-$st="https://<YOUR NAME>.blob.core.windows.net/"
-#az storage account create -g $rgvmjump -n cpvmjump --sku Standard_LRS
+$st="https://jjcpvmjump.blob.core.windows.net/"
+#az storage account create -g $rgc -n jjcpvmjump --sku Standard_LRS
 
 # Create servers
 ## create primary Windows AD server
 $rgvmad = "akademie-vmad-rg"
 az group create -n $rgvmad -l westeurope
 # create windows server in central network with RDP - name: cp-vmad
-$advnetsub1=$(az network vnet subnet show -g $rgc --vnet-name cp-central-we-vnet -n sub1 --query id -o json)
+$advnetsub1=$(az network vnet subnet show -g $rgc --vnet-name cp-central-we-vnet -n sub1 --query id -o tsv)
 az vm create -g $rgvmad -n cp-vmad --image Win2016Datacenter --size Standard_B2ms --subnet $advnetsub1 --boot-diagnostics-storage $st --admin-username cpadmin
 # connect RDP and install Windows Active Directory with DNS zone
 Install-WindowsFeature AD-Domain-Services
@@ -47,7 +47,7 @@ Set-DnsServerForwarder -IPAddress "168.63.129.16" -PassThru
 $rgvmjump = "akademie-vmjump-rg"
 az group create -n $rgvmjump -l westeurope
 # create ubuntu server in central network with SSH - name: cp-vmjump
-$advnetsub1=$(az network vnet subnet show -g $rgc --vnet-name cp-central-we-vnet -n sub1 --query id -o json)
+$advnetsub1=$(az network vnet subnet show -g $rgc --vnet-name cp-central-we-vnet -n sub1 --query id -o tsv)
 az vm create -g $rgvmjump -n cp-vmjump --image UbuntuLTS --size Standard_B2s --subnet $advnetsub1 --authentication-type password --boot-diagnostics-storage $st --admin-username cpadmin
 
 ## create APP server
@@ -63,7 +63,10 @@ az network vnet update -g $rgapp -n cp-app1-we-vnet --dns-servers 10.1.1.4
 ## Configure APP WEB server
 # connect RDP and join to AD domain
 Add-Computer -DomainName corp.cp.com -Restart
-# Install IIS
+# Install IIS and enable Windows authentication on default website
 Enable-WindowsOptionalFeature -Online -FeatureName IIS-WebServerRole
 Enable-WindowsOptionalFeature -Online -FeatureName IIS-WebServer
 Enable-WindowsOptionalFeature -Online -FeatureName IIS-CommonHttpFeatures
+Enable-WindowsOptionalFeature -Online -FeatureName IIS-WindowsAuthentication
+Set-WebConfiguration system.webServer/security/authentication/anonymousAuthentication -PSPath IIS:\ -Location "Default Web Site" -Value @{enabled="False"}
+Set-WebConfiguration system.webServer/security/authentication/windowsAuthentication -PSPath IIS:\ -Location "Default Web Site" -Value @{enabled="True"}
