@@ -322,6 +322,14 @@ Resulting workbook should look like this:
 ![](images/workbookImage1.png)
 ![](images/workbookImage2.png)
 
+Note that in todays lab our servers might run just for few hours. For practical use of this report gather more date and modify all queries to have Time range of Last 30 days.
+
+#### Homework 1
+Instead of fixed time (such as Last 30 days) make this parameter on top (choose from last 7, 30 and 90 days) and make it part of your query.
+
+#### Homework 2
+Create workbook to show Critical logs from all computers. When computer is selected show all logs.
+
 ### Metrics and adding guest-based metrics
 Open Metrics page and create your own views and pin them to dashboard. Install guest-level agent to gather other metrics such as file-system or memory usage.
 
