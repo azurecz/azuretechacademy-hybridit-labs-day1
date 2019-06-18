@@ -200,7 +200,7 @@ Challenges
 Onboard VM to Azure monitor and check VM health page, performance metrics and service map
 
 ### Aggregating and searching logs and create Workbook
-Open Logs and search for logs, use filtering and basic capabilities of Kusto language.
+Open Logs and search for logs, use filtering and basic capabilities of Kusto language. Follow instructor to search and filter Event logs.
 
 Let's search for underutilized servers so we can potentially downsize and save costs.
 
