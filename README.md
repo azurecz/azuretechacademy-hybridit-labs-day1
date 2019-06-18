@@ -319,8 +319,8 @@ Set visualization to Time chart and Legend to Maximum value. Go to Advanced Sett
 You now have all information to solve the following task. Add time chart to show CPU load over time for selected process. Use full wide screen but tiny size (lenght).
 
 Resulting workbook should look like this:
-![](images/workbook1.png)
-![](images/workbook2.png)
+![](images/workbookImage1.png)
+![](images/workbookImage2.png)
 
 ### Metrics and adding guest-based metrics
 Open Metrics page and create your own views and pin them to dashboard. Install guest-level agent to gather other metrics such as file-system or memory usage.
