@@ -199,17 +199,134 @@ Challenges
 ### VM Health and service map
 Onboard VM to Azure monitor and check VM health page, performance metrics and service map
 
-### Aggregating and searching logs
-Open Logs and search for logs, use filtering and basic capabilities of Kusto language
+### Aggregating and searching logs and create Workbook
+Open Logs and search for logs, use filtering and basic capabilities of Kusto language.
+
+Let's search for underutilized servers so we can potentially downsize and save costs.
+
+Try this query. We will calculate CPU load on percentile (average is not good metric, you typically want to see 90th, 95th or 99th percentile or 100rh percentile which is maximum). Because we want to easily change percentile make it variable (let command).
+
+```
+let Percentile=90;
+Perf
+| where CounterName == "% Processor Time" 
+| where ObjectName == "Processor" 
+| where InstanceName == "_Total" 
+| summarize cpuLoad=percentile(CounterValue, Percentile) by Computer
+| sort by cpuLoad asc
+```
+
+Let's another example - we will print load of individual processes on computer.
+```
+let Percentile=90;
+Perf
+| where CounterName == "% Processor Time" 
+| where ObjectName == "Process" 
+| summarize processCpuLoad=percentile(CounterValue, Percentile) by _ResourceId, InstanceName
+| sort by processCpuLoad desc
+```
+
+We will now create Workbook. Create new Workbook in Azure Monitor -> Workbooks -> Empty. First add text with something like Underutilization report. Use first query for Add Query and select grid as output and use Logs as data source, Log analytics workspace and select yours.
+
+Next we will want to make this view look better. First replace Computer with _ResourceId so Azure VM is clickable.
+
+```
+let Percentile=90;
+Perf
+| where CounterName == "% Processor Time" 
+| where ObjectName == "Processor" 
+| where InstanceName == "_Total" 
+| summarize cpuLoad=percentile(CounterValue, Percentile) by _ResourceId
+| sort by cpuLoad asc
+```
+
+We will now graphically signal resources that are underutilized and overutilized. Click Column Settings and use Threashold renderer using Icons for cpuLoad column. Add following icons:
+* <= 15 to blue information icon and text {0}{1} (Underutilized)
+* <= 90 to green available icon and text {0}{1} (OK)
+* Default to red error icon and text {0}{1} (overutilized)
+
+Also select Cusom number formatting and set Units to Percentage, Style Decimal and Maximum fractional digits to 2.
+
+Click Apply and Save and Close.
+
+We will want user to be able to select percentile. Add Parameters, name selectedPercentile, display name Percentile, Drop Down, click required and use following JSON to define options:
+
+```json
+[
+    { "value": 50, "label": "50th"},
+    { "value": 75, "label": "75th"},
+    { "value": 90, "label": "90th"},
+    { "value": 95, "label": "95th"},
+    { "value": 99, "label": "99th"},
+    { "value": 100, "label": "100th"}
+]
+```
+
+Modify query to react on selected percentile:
+```
+let Percentile={selectedPercentile};
+Perf
+| where CounterName == "% Processor Time" 
+| where ObjectName == "Processor" 
+| where InstanceName == "_Total" 
+| summarize cpuLoad = percentile(CounterValue, Percentile) by _ResourceId
+| sort by cpuLoad asc
+```
+
+We will now make workbook interactive. When clicking on particular row we want to display per-process details for this computer in another grid bellow. Click Advanced Settings -> When an item is selected, export a parameter and export parameter _ResourceId as selectedResourceId with default value of NA. Also configure chart title and enable client-side search.
+
+Add new query bellow.
+
+```
+let Percentile={selectedPercentile};
+Perf
+| where _ResourceId == "{selectedResourceId}"
+| where CounterName == "% Processor Time" 
+| where ObjectName == "Process" 
+| summarize processCpuLoad=percentile(CounterValue, Percentile) by _ResourceId, InstanceName
+| project processName=InstanceName, processCpuLoad
+| sort by processCpuLoad desc
+```
+
+To make it look better use Column Settings and make processCpuLoad Bar with blue color and use Custom number formatting to limit friction decimals.
+
+Click Advanced Settings and configure the following:
+* Make this half screen by setting Make this item a custom width to 50
+* Modify title to Server processes
+* Enable client-side search with Show filter field above grid or tiles
+* Hide this chart if no server is selected by clicking Make this item conditionally visible when selectedResourceId is not equal to NA
+
+We now have interactive Workbook. Let's configure space on right side to include two time charts. One with time graph showing CPU load over time and one with CPU load over time for selected process.
+
+Add query with Logs as data source for your Log Analytics workspace that will look like this:
+```
+let Percentile={selectedPercentile};
+Perf
+| where _ResourceId == "{selectedResourceId}"
+| where CounterName == "% Processor Time" 
+| where ObjectName == "Processor" 
+| where InstanceName == "_Total" 
+| summarize cpuLoad = percentile(CounterValue, Percentile) by _ResourceId, bin(TimeGenerated, 15m)
+```
+
+Set visualization to Time chart and Legend to Maximum value. Go to Advanced Settings and configure:
+* Set Make this item a custom width to 50
+* Hide this chart if no server is selected by clicking Make this item conditionally visible when selectedResourceId is not equal to NA
+* Modify chart title to CPU load
+
+**Unguided task**
+
+You now have all information to solve the following task. Add time chart to show CPU load over time for selected process. Use full wide screen but tiny size (lenght).
+
+Resulting workbook should look like this:
+![](images/workbook1.png)
+![](images/workbook2.png)
 
 ### Metrics and adding guest-based metrics
 Open Metrics page and create your own views and pin them to dashboard. Install guest-level agent to gather other metrics such as file-system or memory usage.
 
 ### Create alert
 Create alert based on metrics. We will use dynamic threashold (ML-based alert) and CPU usage and setup Action Group to send push notification to Azure mobile application. Generate CPU load on machine and wait for alert to popup in Azure mobile application.
-
-### Creating workbook
-Follow instructor to create your own workbook adding some metrics and some log views.
 
 ### Update management
 Create Automation Account and onboard VM to it. Check missing updates and learn how to plan patching deployments.
