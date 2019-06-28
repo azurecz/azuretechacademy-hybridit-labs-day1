@@ -199,9 +199,47 @@ Challenges
 ### VM Health and service map
 Onboard VM to Azure monitor and check VM health page, performance metrics and service map
 
-### Aggregating and searching logs and create Workbook
+### Working with analytics queries
 Open Logs and search for logs, use filtering and basic capabilities of Kusto language. Follow instructor to search and filter Event logs.
 
+Follow instructor for step by step creation of queries. You will learn about key tables such as Event, Syslog, Perf or Updates, learn how to filter, summarize and use joins.
+
+One of resulting query will combine information from Event, Updates and Perf tables:
+
+```
+Event
+| where EventLevelName in ("Warning", "Error")
+| summarize EventCount = count() by Computer, EventLevelName
+| join kind= leftouter (
+   Update
+    | where Classification == "Critical Updates"  
+    | where UpdateState == "Needed" 
+    | summarize UpdatesMissing = count() by Computer  
+) on Computer 
+| project-away Computer1
+| join kind= leftouter (
+   Perf
+    | where CounterName == "% Processor Time"
+    | where ObjectName == "Processor Information" 
+    | where InstanceName == "_Total" 
+    | summarize CpuLoad99Percentile = strcat(round(percentile(CounterValue, 99), 1), ' %') by Computer 
+) on Computer
+| project-away Computer1
+```
+
+You will also use bin aggregation by time to generate time chart:
+
+```
+Perf
+| where TimeGenerated >= ago(1h)
+| where ObjectName == "Processor" 
+| where CounterName == "% Processor Time" 
+| where InstanceName == "_Total" 
+| summarize CpuLoad = round(percentile(CounterValue, 95), 1) by bin(TimeGenerated, 5m), Computer
+| render timechart 
+```
+
+### Creating workbook
 Let's search for underutilized servers so we can potentially downsize and save costs.
 
 Try this query. We will calculate CPU load on percentile (average is not good metric, you typically want to see 90th, 95th or 99th percentile or 100rh percentile which is maximum). Because we want to easily change percentile make it variable (let command).
