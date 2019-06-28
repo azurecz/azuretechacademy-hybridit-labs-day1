@@ -26,7 +26,7 @@ az group create -n $rgvmad -l westeurope
 $advnetsub1=$(az network vnet subnet show -g $rgc --vnet-name cp-central-we-vnet -n sub1 --query id -o tsv)
 az vm create -g $rgvmad -n cp-vmad --image Win2016Datacenter --size Standard_B2ms --subnet $advnetsub1 --boot-diagnostics-storage $st --admin-username cpadmin
 # connect RDP and install Windows Active Directory with DNS zone
-Install-WindowsFeature AD-Domain-Services
+Install-WindowsFeature AD-Domain-Services  -IncludeManagementTools
 Import-Module ADDSDeployment
 Install-ADDSForest `
 -CreateDnsDelegation:$false `
