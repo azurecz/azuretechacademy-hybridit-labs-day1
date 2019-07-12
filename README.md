@@ -421,13 +421,8 @@ Training:
 Dates: Prague 28.6.19
 
 ## Homework 1
-Today we had a lot to cover and you might not have finished everything. As your homework redo the lab and finish all items there. You will have couple of week to do so. Follow documentation and chat with your peers in your Teams.
 
-## Homework 2 - bridge to next training
-After couple of weeks you will be assigned with additional homework - check Teams for details as they become available. You will have 1-2 months to finish this and provide required outputs privately to instructors. Check for notifications in Teams.
-
-## Homework 3 - preparation for next training
-2 weeks before next training you will receive full agenda and few instructions to check you are familiar with basics and study/practice should you need to get better prepared for next training.
+Follow this [instructions](homework/readme.md).
 
 # Contacts
 
